@@ -1,7 +1,5 @@
 package ru.practicum.booking;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -9,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-
-import ru.practicum.dto.BookingDto;
 import ru.practicum.client.BaseClient;
+import ru.practicum.dto.BookingDto;
+
+import java.util.Map;
 
 @Service
 public class BookingClient extends BaseClient {
@@ -37,8 +36,7 @@ public class BookingClient extends BaseClient {
     }
 
     public ResponseEntity<Object> respondToBooking(long userId, long bookingId, boolean approved) {
-        Map<String, Object> parameters = Map.of("approved", approved);
-        return patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
+        return patch(String.format("/%d?approved=%b", bookingId, approved), userId, null, null);
     }
 
     public ResponseEntity<Object> getBookingInfo(long userId, long bookingId) {
@@ -49,7 +47,7 @@ public class BookingClient extends BaseClient {
     public ResponseEntity<Object> getBookingsByOwner(long userId, String state) {
 
         Map<String, Object> parameters = Map.of("state", state);
-        return get("/" + userId,userId,parameters);
+        return get("/" + userId, userId, parameters);
     }
 
 }
